@@ -22,20 +22,20 @@ RUN git clone https://github.com/OpenSIPS/opensips.git -b 1.11 opensips.git
 WORKDIR opensips.git
 # FIXME Set instal dir to /opt/opensips
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips
-RUN make modules
+RUN make modules TLS=1 SCTP=1 prefix=/opt/opensips
 
 # Install
 USER root
 RUN mkdir -p /opt/opensips
 RUN chown -R opensips.opensips /opt/opensips
 USER opensips
-RUN make install
+RUN make install TLS=1 SCTP=1 prefix=/opt/opensips
 
 # Cleanup
+USER root
 RUN apt-get purge -y \
   bison \
   build-essential \
-  ca-certificates \
   flex \
   git \
   m4
