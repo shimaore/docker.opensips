@@ -8,10 +8,15 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   ca-certificates \
   flex \
   git \
+  libcurl4-gnutls-dev \
+  libjson0-dev \
+  libmicrohttpd-dev \
   libncurses5-dev \
   libsctp-dev \
   libssl-dev \
-  m4
+  libxml2-dev \
+  m4 \
+  pkg-config
 
 RUN useradd -m opensips
 USER opensips
@@ -21,15 +26,15 @@ RUN git clone https://github.com/OpenSIPS/opensips.git -b 1.11 opensips.git
 # Build
 WORKDIR opensips.git
 # FIXME Set instal dir to /opt/opensips
-RUN make TLS=1 SCTP=1 prefix=/opt/opensips
-RUN make modules TLS=1 SCTP=1 prefix=/opt/opensips
+RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client"
+RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules
 
 # Install
 USER root
 RUN mkdir -p /opt/opensips
 RUN chown -R opensips.opensips /opt/opensips
 USER opensips
-RUN make install TLS=1 SCTP=1 prefix=/opt/opensips
+RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" install
 
 # Cleanup
 USER root
