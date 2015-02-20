@@ -3,34 +3,42 @@ MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 # Install prereqs
 RUN apt-get update && apt-get --no-install-recommends -y install \
+  bison \
   build-essential \
   ca-certificates \
-  git
-RUN apt-get --no-install-recommends -y install \
-  libssl-dev \
-  libsctp-dev \
-  bison \
   flex \
-  libncurses5-dev m4
+  git \
+  libncurses5-dev \
+  libsctp-dev \
+  libssl-dev \
+  m4
 
 RUN useradd -m opensips
 USER opensips
 WORKDIR /home/opensips
-RUN git clone http://stephane.shimaore.net/debian/src/opensips.git -b 1.11 opensips.git
+RUN git clone https://github.com/OpenSIPS/opensips.git -b 1.11 opensips.git
 
 # Build
 WORKDIR opensips.git
-RUN make TLS=1 SCTP=1
+# FIXME Set instal dir to /opt/opensips
+RUN make TLS=1 SCTP=1 prefix=/opt/opensips
 RUN make modules
 
 # Install
 USER root
+RUN mkdir -p /opt/opensips
+RUN chown -R opensips.opensips /opt/opensips
+USER opensips
 RUN make install
 
 # Cleanup
 RUN apt-get purge -y \
+  bison \
   build-essential \
-  git
+  ca-certificates \
+  flex \
+  git \
+  m4
 USER opensips
 WORKDIR /home/opensips
 RUN rm -rf opensips.git
