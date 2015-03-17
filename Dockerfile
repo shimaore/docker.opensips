@@ -16,6 +16,7 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   libssl-dev \
   libxml2-dev \
   m4 \
+  netbase \
   pkg-config
 
 RUN useradd -m opensips
@@ -25,7 +26,6 @@ RUN git clone https://github.com/OpenSIPS/opensips.git -b 1.11 opensips.git
 
 # Build
 WORKDIR opensips.git
-# FIXME Set instal dir to /opt/opensips
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client"
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules
 
