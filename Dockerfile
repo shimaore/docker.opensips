@@ -22,7 +22,8 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
 RUN useradd -m opensips
 USER opensips
 WORKDIR /home/opensips
-RUN git clone https://github.com/OpenSIPS/opensips.git -b 2.1.0 opensips.git
+RUN git clone https://github.com/OpenSIPS/opensips.git opensips.git && \
+    git checkout 7c0b08791c2171acc742efb93bd9d9cc5fe8ba3d
 
 # Build
 WORKDIR opensips.git
