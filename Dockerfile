@@ -1,4 +1,4 @@
-FROM shimaore/debian:2.0.1
+FROM shimaore/debian:2.0.4
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 # Install prereqs
@@ -26,7 +26,7 @@ RUN git clone https://github.com/OpenSIPS/opensips.git opensips.git
 
 # Build
 WORKDIR opensips.git
-RUN git checkout 7c0b08791c2171acc742efb93bd9d9cc5fe8ba3d
+RUN git checkout ee99ac71d8718c93c29e28e6a5266287491f17a5
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client"
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules
 
