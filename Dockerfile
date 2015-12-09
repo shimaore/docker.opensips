@@ -22,11 +22,12 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
 RUN useradd -m opensips
 USER opensips
 WORKDIR /home/opensips
-RUN git clone https://github.com/OpenSIPS/opensips.git opensips.git
+# RUN git clone https://github.com/OpenSIPS/opensips.git opensips.git
+RUN git clone https://github.com/shimaore/opensips.git opensips.git
 
 # Build
 WORKDIR opensips.git
-RUN git checkout ee99ac71d8718c93c29e28e6a5266287491f17a5
+RUN git checkout f24eb84f48616e1ecc69eddf8342344e2075d600
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client"
 RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules
 
