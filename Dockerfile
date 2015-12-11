@@ -17,35 +17,38 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   libxml2-dev \
   m4 \
   netbase \
-  pkg-config
+  pkg-config \
+  && \
+  useradd -m opensips \
+  mkdir -p /opt/opensips \
+  chown -R opensips.opensips /opt/opensips
 
-RUN useradd -m opensips
 USER opensips
 WORKDIR /home/opensips
 # RUN git clone https://github.com/OpenSIPS/opensips.git opensips.git
-RUN git clone https://github.com/shimaore/opensips.git opensips.git
-
-# Build
-WORKDIR opensips.git
-RUN git checkout f24eb84f48616e1ecc69eddf8342344e2075d600
-RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client"
-RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules
-
-# Install
-USER root
-RUN mkdir -p /opt/opensips
-RUN chown -R opensips.opensips /opt/opensips
-USER opensips
-RUN make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" install
+RUN \
+  git clone https://github.com/shimaore/opensips.git opensips.git && \
+  cd opensips.git && \
+  git checkout f24eb84f48616e1ecc69eddf8342344e2075d600 && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" install && \
+  cd .. && \
+  rm -rf opensips.git
 
 # Cleanup
 USER root
 RUN apt-get purge -y \
   bison \
   build-essential \
+  ca-certificates \
+  cpp-5 \
   flex \
+  gcc-5 \
   git \
-  m4
+  m4 \
+  pkg-config \
+  && apt-get autoremove -y && apt-get clean
+
 USER opensips
 WORKDIR /home/opensips
-RUN rm -rf opensips.git
