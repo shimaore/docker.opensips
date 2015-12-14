@@ -19,8 +19,8 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   netbase \
   pkg-config \
   && \
-  useradd -m opensips \
-  mkdir -p /opt/opensips \
+  useradd -m opensips && \
+  mkdir -p /opt/opensips && \
   chown -R opensips.opensips /opt/opensips
 
 USER opensips
