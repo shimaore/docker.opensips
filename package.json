@@ -1,5 +1,5 @@
 {
   "name": "docker.opensips",
   "description": "Docker image of OpenSIPS",
-  "version": "2.1.0"
+  "version": "2.1.1"
 }
