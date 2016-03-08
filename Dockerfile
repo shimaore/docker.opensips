@@ -29,7 +29,7 @@ WORKDIR /home/opensips
 RUN \
   git clone https://github.com/shimaore/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout f24eb84f48616e1ecc69eddf8342344e2075d600 && \
+  git checkout 073dc8eefd24005aacd44fcaeb0074993da147e8 && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client" install && \
