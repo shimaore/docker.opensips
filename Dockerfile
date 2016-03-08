@@ -48,7 +48,9 @@ RUN apt-get purge -y \
   git \
   m4 \
   pkg-config \
-  && apt-get autoremove -y && apt-get clean
-
+  && apt-get autoremove -y && \
+  apt-get install -y \
+  libmicrohttpd10 \
+  && apt-get clean
 USER opensips
 WORKDIR /home/opensips
