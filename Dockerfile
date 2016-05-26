@@ -9,7 +9,7 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   flex \
   git \
   libcurl4-gnutls-dev \
-  libjson0-dev \
+  libjson-c-dev \
   libmicrohttpd-dev \
   libncurses5-dev \
   libsctp-dev \
