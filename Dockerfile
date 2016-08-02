@@ -50,7 +50,7 @@ RUN apt-get purge -y \
   pkg-config \
   && apt-get autoremove -y && \
   apt-get install -y \
-  libmicrohttpd10 \
+  libmicrohttpd12 \
   && apt-get clean
 USER opensips
 WORKDIR /home/opensips
