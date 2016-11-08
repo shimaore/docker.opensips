@@ -1,4 +1,4 @@
-FROM shimaore/debian:2.0.10
+FROM shimaore/debian:2.0.12
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 # Install prereqs
@@ -29,7 +29,7 @@ WORKDIR /home/opensips
 RUN \
   git clone -b 2.2 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout 2b79d96dbde433648f129f7b3527b8123941a4c5 && \
+  git checkout b9b556081d81de289d9b2d38e1a1f5bcc2e34e38 && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi" && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi" install && \
