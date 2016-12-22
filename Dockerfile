@@ -29,7 +29,7 @@ WORKDIR /home/opensips
 RUN \
   git clone -b 2.2 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout 356dc1fb2c73eee4d927477dcaa940af0d6f0acc && \
+  git checkout 2bdbbe4ae86847ba1a74ec0f876f2b246fbeaffd && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi" && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi" install && \
