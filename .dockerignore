@@ -1,4 +1,5 @@
 .git
+.editorconfig
 Dockerfile
 Makefile
 package.json
