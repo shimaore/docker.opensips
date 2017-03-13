@@ -42,9 +42,9 @@ RUN apt-get purge -y \
   bison \
   build-essential \
   ca-certificates \
-  cpp-5 \
+  cpp-6 \
   flex \
-  gcc-5 \
+  gcc-6 \
   git \
   m4 \
   pkg-config \
