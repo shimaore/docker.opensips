@@ -1,4 +1,4 @@
-FROM shimaore/debian:2.0.16
+FROM shimaore/debian:2.0.17
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 # Install prereqs
