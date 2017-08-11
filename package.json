@@ -3,5 +3,8 @@
   "docker_name": "shimaore/opensips",
   "description": "Docker image of OpenSIPS",
   "version": "4.2.2",
-  "private": true
+  "private": true,
+  "scripts": {
+    "version": "./build/gitlab-ci.yml"
+  }
 }
