@@ -1,5 +1,4 @@
 build:
-  image: docker:dind
   stage: build
   only:
   - tags
