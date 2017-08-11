@@ -1,5 +1,5 @@
 build:
-  image: docker:latest
+  image: docker:dind
   stage: build
   only:
   - tags
