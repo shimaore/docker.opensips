@@ -1,4 +1,4 @@
-FROM shimaore/debian:2.0.17
+FROM debian:testing-slim
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 # Install prereqs
@@ -25,11 +25,10 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
 
 USER opensips
 WORKDIR /home/opensips
-# RUN git clone https://github.com/OpenSIPS/opensips.git opensips.git
 RUN \
   git clone -b 2.2 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout ae6ce220db119fa3ee21a58f8d70a5d7669d7f28 && \
+  git checkout 23a905773e9e5fcad095207ab7ee036896ec857c && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" install && \
