@@ -1,4 +1,5 @@
 build:
+  image: docker:latest
   stage: build
   only:
   - tags
