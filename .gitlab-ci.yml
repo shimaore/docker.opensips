@@ -5,8 +5,5 @@ build:
   before_script:
   - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
   script:
-  - docker build -t ${CI_REGISTRY_IMAGE}:${PROJECT_TAG} .
-  - docker push ${CI_REGISTRY_IMAGE}:${PROJECT_TAG}
-
-variables:
-  PROJECT_TAG: "4.2.5"
+  - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG} .
+  - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
