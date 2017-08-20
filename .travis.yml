@@ -1,0 +1,15 @@
+sudo: required
+language: shell
+services:
+- docker
+
+script:
+  - docker build -t "shimaore/docker.opensips:latest" .
+
+# after_success:
+#   - docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+#   - test "${TRAVIS_BRANCH}" = master && docker push "shimaore/docker.opensips:latest"
+#   - test -n "${TRAVIS_BRANCH}" && docker tag  "shimaore/docker.opensips:latest" "shimaore/docker.opensips:${TRAVIS_BRANCH}"
+#   - test -n "${TRAVIS_BRANCH}" && docker push "shimaore/docker.opensips:${TRAVIS_BRANCH}"
+#   - test -n "${TRAVIS_TAG}" && docker tag  "shimaore/docker.opensips:latest" "shimaore/docker.opensips:${TRAVIS_TAG}"
+#   - test -n "${TRAVIS_TAG}" && docker push "shimaore/docker.opensips:${TRAVIS_TAG}"
