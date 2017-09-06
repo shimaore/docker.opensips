@@ -10,6 +10,7 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   git \
   libcurl4-gnutls-dev \
   libjson-c-dev \
+  libhiredis-dev \
   libmicrohttpd-dev \
   libncurses5-dev \
   libsctp-dev \
@@ -29,9 +30,9 @@ RUN \
   git clone -b 2.2 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
   git checkout 23a905773e9e5fcad095207ab7ee036896ec857c && \
-  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" && \
-  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" modules && \
-  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" install && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" modules && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" install && \
   cd .. && \
   rm -rf opensips.git
 
