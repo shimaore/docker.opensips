@@ -26,12 +26,12 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   &&
   cd /home/opensips \
   && \
-  git clone -b 2.2 https://github.com/OpenSIPS/opensips.git opensips.git && \
+  git clone -b 2.3 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout 23a905773e9e5fcad095207ab7ee036896ec857c && \
-  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" && \
-  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" modules && \
-  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" install && \
+  git checkout cf9c0f17ebd193ab0becc5fd8c9dff4c11b3b0bb && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo proto_wss pua pua_dialoginfo" && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo proto_wss pua pua_dialoginfo" modules && \
+  make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo proto_wss pua pua_dialoginfo" install && \
   cd .. && \
   rm -rf opensips.git \
   && \
