@@ -22,11 +22,10 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   && \
   useradd -m opensips && \
   mkdir -p /opt/opensips && \
-  chown -R opensips.opensips /opt/opensips
-
-USER opensips
-WORKDIR /home/opensips
-RUN \
+  chown -R opensips.opensips /opt/opensips \
+  &&
+  cd /home/opensips \
+  && \
   git clone -b 2.2 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
   git checkout 23a905773e9e5fcad095207ab7ee036896ec857c && \
@@ -34,11 +33,9 @@ RUN \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo pua pua_dialoginfo" install && \
   cd .. && \
-  rm -rf opensips.git
-
-# Cleanup
-USER root
-RUN apt-get purge -y \
+  rm -rf opensips.git \
+  && \
+  apt-get purge -y \
   bison \
   build-essential \
   ca-certificates \
