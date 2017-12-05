@@ -23,7 +23,7 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   useradd -m opensips && \
   mkdir -p /opt/opensips && \
   chown -R opensips.opensips /opt/opensips \
-  &&
+  && \
   cd /home/opensips \
   && \
   git clone -b 2.3 https://github.com/OpenSIPS/opensips.git opensips.git && \
