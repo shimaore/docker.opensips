@@ -2,7 +2,22 @@ FROM debian:testing-slim
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 # Install prereqs
-ENV MODULES b2b_logic cachedb_redis db_http httpd json rest_client presence presence_mwi presence_dialoginfo proto_wss pua pua_dialoginfo tls_mgm
+ENV MODULES \
+  b2b_logic \
+  cachedb_redis \
+  db_http \
+  httpd \
+  json \
+  rest_client \
+  presence \
+  presence_mwi \
+  presence_dialoginfo \
+  proto_tls \
+  proto_wss \
+  pua \
+  pua_dialoginfo \
+  tls_mgm
+
 RUN apt-get update && apt-get --no-install-recommends -y install \
   bison \
   build-essential \
