@@ -2,6 +2,6 @@
   "name": "docker.opensips",
   "docker_name": "shimaore/opensips",
   "description": "Docker image of OpenSIPS",
-  "version": "4.4.2",
+  "version": "4.4.3",
   "private": true
 }
