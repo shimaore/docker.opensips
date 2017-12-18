@@ -67,6 +67,7 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   && apt-get clean \
   && rm -rf \
     /opt/opensips/etc/opensips/opensips.cfg \
-    /opt/opensips/etc/opensips/tls/
+    /opt/opensips/etc/opensips/tls/ \
+  && chown opensips /opt/opensips/etc/opensips/
 USER opensips
 WORKDIR /home/opensips
