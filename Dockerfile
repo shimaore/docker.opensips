@@ -64,6 +64,9 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   && apt-get autoremove -y && \
   apt-get install -y \
   libmicrohttpd12 \
-  && apt-get clean
+  && apt-get clean \
+  && rm -rf \
+    /opt/opensips/etc/opensips/opensips.cfg \
+    /opt/opensips/etc/opensips/tls/
 USER opensips
 WORKDIR /home/opensips
