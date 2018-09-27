@@ -1,0 +1,134 @@
+diff --git a/Makefile.defs b/Makefile.defs
+index ceca68258..7c58f6371 100644
+--- a/Makefile.defs
++++ b/Makefile.defs
+@@ -1421,6 +1421,15 @@ ifeq ($(OS), linux)
+ 	ifeq ($(NO_SELECT),)
+ 		DEFS+=-DHAVE_SELECT
+ 	endif
++	ifeq ($(shell [ -f /usr/include/ifaddrs.h ] && echo has_ifaddrs), has_ifaddrs)
++		DEFS+=-DHAVE_IFADDRS
++	endif
++	ifeq ($(shell [ -f /usr/include/sys/param.h ] && echo has_sys_param_h), has_sys_param_h)
++		DEFS+=-DHAVE_SYS_PARAM_H
++	endif
++	ifeq ($(shell [ -f /usr/include/sys/timerfd.h ] && echo has_sys_timerfd_h), has_sys_timerfd_h)
++		DEFS+=-DHAVE_TIMER_FD
++	endif
+ endif
+ 
+ ifeq ($(OS), gnu_kfreebsd)
+diff --git a/daemonize.c b/daemonize.c
+index 5883cb0e4..67c92965c 100644
+--- a/daemonize.c
++++ b/daemonize.c
+@@ -33,9 +33,11 @@
+ 
+ #include <sys/types.h>
+ 
++#ifndef _XOPEN_SOURCE
+ #define _XOPEN_SOURCE   /* needed on linux for the  getpgid prototype, but
+                            openbsd 3.2 won't include common types (uint a.s.o)
+                            if defined before including sys/types.h */
++#endif
+ #define _XOPEN_SOURCE_EXTENDED /* same as above */
+ #define __USE_XOPEN_EXTENDED /* same as above, overrides features.h */
+ #define __EXTENSIONS__ /* needed on solaris: if XOPEN_SOURCE is defined
+diff --git a/lib/timerfd.h b/lib/timerfd.h
+index 1147e132e..7ca946967 100644
+--- a/lib/timerfd.h
++++ b/lib/timerfd.h
+@@ -26,8 +26,11 @@
+ #define __LIB_TIMERFD__
+ 
+ #if (defined __OS_linux) && (__GLIBC__ >= 2) && (__GLIBC_MINOR__ >= 8)
+-	#include <sys/timerfd.h>  /* for timer FD */
+ 	#define HAVE_TIMER_FD 1
+ #endif
+ 
++#ifdef HAVE_TIMER_FD
++	#include <sys/timerfd.h>  /* for timer FD */
++#endif
++
+ #endif /* __LIB_TIMERFD__ */
+diff --git a/modules/mathops/math_funcs.c b/modules/mathops/math_funcs.c
+index 3ba986824..2d0abd7ff 100644
+--- a/modules/mathops/math_funcs.c
++++ b/modules/mathops/math_funcs.c
+@@ -22,6 +22,8 @@
+  * 2013-02-13: Created (Liviu)
+  */
+ 
++#include <features.h>
++
+ #ifndef _XOPEN_SOURCE
+ #define _XOPEN_SOURCE 600
+ #define _ADDED_XOPEN
+diff --git a/modules/mathops/mathops.c b/modules/mathops/mathops.c
+index f3a8105f0..1f49f4036 100644
+--- a/modules/mathops/mathops.c
++++ b/modules/mathops/mathops.c
+@@ -22,7 +22,7 @@
+  * 2013-02-13: Created (Liviu)
+  */
+ 
+-
++#include <features.h>
+ #ifndef _XOPEN_SOURCE
+ #define _XOPEN_SOURCE 600
+ #define _ADDED_XOPEN
+diff --git a/modules/tls_mgm/tls_mgm.c b/modules/tls_mgm/tls_mgm.c
+index 42258ad05..ef51b6a01 100644
+--- a/modules/tls_mgm/tls_mgm.c
++++ b/modules/tls_mgm/tls_mgm.c
+@@ -73,10 +73,12 @@
+ 
+ #if (OPENSSL_VERSION_NUMBER >= 0x10100000L && defined __OS_linux)
+ #include <features.h>
+-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 2)
++#if defined(__GLIBC_PREREQ)
++#if __GLIBC_PREREQ(2, 2)
+ #define __OPENSSL_ON_EXIT
+ #endif
+ #endif
++#endif
+ 
+ #define DB_CAP DB_CAP_QUERY | DB_CAP_UPDATE
+ #define len(s)	s == NULL?0:strlen(s)
+diff --git a/resolve.c b/resolve.c
+index db8a91428..d81d99562 100644
+--- a/resolve.c
++++ b/resolve.c
+@@ -33,6 +33,9 @@
+  */
+ 
+ #include <sys/types.h>
++#ifdef HAVE_SYS_PARAM_H
++#include <sys/param.h>
++#endif
+ #include <netinet/in.h>
+ #include <arpa/nameser.h>
+ #include <resolv.h>
+diff --git a/socket_info.c b/socket_info.c
+index efd044e62..ae3d4e960 100644
+--- a/socket_info.c
++++ b/socket_info.c
+@@ -60,11 +60,16 @@
+ 
+ #ifdef __OS_linux
+ #include <features.h>     /* for GLIBC version testing */
+-#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 4)
+-#include <ifaddrs.h>
++#if defined(__GLIBC_PREREQ)
++#if __GLIBC_PREREQ(2, 4)
+ #define HAVE_IFADDRS
+ #endif
+ #endif
++#endif
++
++#ifdef HAVE_IFADDRS
++#include <ifaddrs.h>
++#endif
+ 
+ #define MAX_PROC_BUFFER	256
+ 

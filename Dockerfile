@@ -1,12 +1,14 @@
-FROM debian:testing-slim
+FROM alpine:edge
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
 RUN \
-  useradd -m opensips && \
+  addgroup -S opensips && \
+  adduser -S -D -s /sbin/nologin -G opensips -g OpenSIPS opensips && \
   mkdir -p /opt/opensips && \
-  chown -R opensips.opensips /opt/opensips
+  chown -R opensips.opensips /opt/opensips \
 
-COPY tos.patch /home/opensips/tos.patch
+COPY tos.patch /tmp/tos.patch
+COPY musl-libc.patch /tmp/musl-libc.patch
 
 # Install prereqs
 ENV MODULES \
@@ -25,56 +27,53 @@ ENV MODULES \
   pua_dialoginfo \
   tls_mgm
 
-RUN apt-get update && apt-get --no-install-recommends -y install \
+RUN apk add --update --no-cache \
+  json-c \
+  hiredis \
+  ncurses \
+  lksctp-tools \
+  libssl1.0 \
+  libxml2 \
+  libmicrohttpd \
+  \
+  && \
+  apk add --update --no-cache --virtual .build-deps \
   bison \
-  build-essential \
+  build-base \
   ca-certificates \
   flex \
   git \
-  libcurl4-gnutls-dev \
-  libjson-c-dev \
-  libhiredis-dev \
-  libmicrohttpd-dev \
-  libncurses5-dev \
-  libsctp-dev \
-  libssl-dev \
-  libxml2-dev \
   m4 \
-  netbase \
+  curl-dev \
+  gnutls-dev \
+  json-c-dev \
+  hiredis-dev \
+  ncurses-dev \
+  libmicrohttpd-dev \
+  lksctp-tools-dev \
+  libxml2-dev \
   patch \
-  pkg-config \
+  linux-headers \
+  pkgconf \
   && \
   cd /home/opensips \
   && \
-  git clone -b 2.3 https://github.com/OpenSIPS/opensips.git opensips.git && \
+  git clone -b 2.4 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout c0e2779171a913506effed2285c1e614345334f6 && \
-  cat /home/opensips/tos.patch && \
-  patch < /home/opensips/tos.patch && \
+  git checkout cb43020ee61614dbd2a4bd5009874365b1f98f56 && \
+  patch < /tmp/tos.patch && \
+  patch -p1 < /tmp/musl-libc.patch && rm -f /tmp/musl-libc.patch && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" install && \
   cd .. && \
   rm -rf opensips.git \
   && \
-  apt-get purge -y \
-  bison \
-  build-essential \
-  ca-certificates \
-  cpp-8 \
-  flex \
-  gcc-8 \
-  git \
-  m4 \
-  patch \
-  pkg-config \
-  && apt-get autoremove -y && \
-  apt-get install -y \
-  libmicrohttpd12 \
-  && apt-get clean \
+  apk del .build-deps \
   && rm -rf \
     /opt/opensips/etc/opensips/opensips.cfg \
     /opt/opensips/etc/opensips/tls/ \
-  && chown opensips /opt/opensips/etc/opensips/
+  && chown opensips /opt/opensips/etc/opensips/ \
+  && echo Done
 USER opensips
 WORKDIR /home/opensips
