@@ -1,0 +1,11 @@
+--- main.c	2019-01-31 19:23:58.680472521 +0100
++++ main.c.orig	2019-01-31 19:23:48.640421160 +0100
+@@ -242,7 +242,7 @@
+ int mcast_ttl = -1; /* if -1, don't touch it, use the default (usually 1) */
+ #endif /* USE_MCAST */
+ 
+-int tos = IPTOS_LOWDELAY;
++int tos = 0;
+ 
+ struct socket_info* bind_address=0; /* pointer to the crt. proc.
+ 									 listening address*/

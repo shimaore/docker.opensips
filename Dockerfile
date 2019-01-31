@@ -1,6 +1,13 @@
 FROM debian:testing-slim
 MAINTAINER Stéphane Alnet <stephane@shimaore.net>
 
+RUN \
+  useradd -m opensips && \
+  mkdir -p /opt/opensips && \
+  chown -R opensips.opensips /opt/opensips
+
+COPY tos.patch /home/opensips/tos.patch
+
 # Install prereqs
 ENV MODULES \
   b2b_logic \
@@ -34,17 +41,16 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   libxml2-dev \
   m4 \
   netbase \
+  patch \
   pkg-config \
-  && \
-  useradd -m opensips && \
-  mkdir -p /opt/opensips && \
-  chown -R opensips.opensips /opt/opensips \
   && \
   cd /home/opensips \
   && \
   git clone -b 2.3 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout cf9c0f17ebd193ab0becc5fd8c9dff4c11b3b0bb && \
+  git checkout c0e2779171a913506effed2285c1e614345334f6 && \
+  cat /home/opensips/tos.patch && \
+  patch < /home/opensips/tos.patch && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" modules && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" install && \
@@ -55,11 +61,12 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   bison \
   build-essential \
   ca-certificates \
-  cpp-6 \
+  cpp-8 \
   flex \
-  gcc-6 \
+  gcc-8 \
   git \
   m4 \
+  patch \
   pkg-config \
   && apt-get autoremove -y && \
   apt-get install -y \
