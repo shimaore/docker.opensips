@@ -46,9 +46,9 @@ RUN apt-get update && apt-get --no-install-recommends -y install \
   && \
   cd /home/opensips \
   && \
-  git clone -b 2.3 https://github.com/OpenSIPS/opensips.git opensips.git && \
+  git clone -b 2.4 https://github.com/OpenSIPS/opensips.git opensips.git && \
   cd opensips.git && \
-  git checkout c0e2779171a913506effed2285c1e614345334f6 && \
+  git checkout 498aec2a3e7ea7ddeeac95030d7a94b37b2fc47c && \
   cat /home/opensips/tos.patch && \
   patch < /home/opensips/tos.patch && \
   make TLS=1 SCTP=1 prefix=/opt/opensips include_modules="${MODULES}" && \
